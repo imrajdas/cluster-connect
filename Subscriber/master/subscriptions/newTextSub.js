@@ -21,7 +21,7 @@ const nextHandler = (ws, data) => {
 		console.log('\n\n**VALID JSON DATA**\n\n');
 		console.log(JSON.parse(data.data.messagePosted.text));
 	} catch {}
-	ws.send(JSON.stringify({ type: 'apply-yaml', data: JSON.stringify(data.data.messagePosted.text) }));
+	ws.send(JSON.stringify({ type: 'apply-yaml', data: data.data.messagePosted.text }));
 };
 const errHandler = (ws, err) => {
 	//Business Logic
