@@ -14,7 +14,7 @@ docker-compose up
 ```bash
 cd DummyUI
 npm i
-GQL_SERVER=localhost:8080/graphql npm start
+GQL_SERVER=npm start
 ```
 
 ### Setup Subscriber
