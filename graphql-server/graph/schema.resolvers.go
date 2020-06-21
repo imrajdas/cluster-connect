@@ -8,36 +8,37 @@ import (
 	"cluster-connect/graphql-server/graph/model"
 	"context"
 	"math/rand"
-
 )
 
 var clusterPublish map[string]chan *model.ClusterResponse
 
 func init() {
-    clusterPublish = map[string]chan *model.ClusterResponse{}
+	clusterPublish = map[string]chan *model.ClusterResponse{}
 }
 
 func (r *mutationResolver) CreateCluster(ctx context.Context, input model.ClusterInput) (*model.ClusterResponse, error) {
 	newCluster := &model.ClusterResponse{
 		Data: input.Data,
-		ID: input.ID,
+		ID:   input.ID,
 	}
 
 	for _, observer := range clusterPublish {
-        observer <- newCluster
-    }
-    return newCluster, nil
+		observer <- newCluster
+	}
+	return newCluster, nil
 }
 
 func (r *subscriptionResolver) ClusterSubscription(ctx context.Context) (<-chan *model.ClusterResponse, error) {
 	id := rand.Int()
 
 	clusterEvent := make(chan *model.ClusterResponse, 1)
+
 	go func() {
-        <-ctx.Done()
-    }()
-    clusterPublish[string(id)] = clusterEvent
-    return clusterEvent, nil
+		<-ctx.Done()
+	}()
+
+	clusterPublish[string(id)] = clusterEvent
+	return clusterEvent, nil
 
 }
 
